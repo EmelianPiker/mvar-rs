@@ -26,7 +26,7 @@ impl<T> MVar<T> {
         }
     }
 
-    pub fn take(&mut self) -> T {
+    pub fn take(&self) -> T {
         let mut guard = self.lock.lock().unwrap();
         loop {
             match guard.take() {
@@ -40,7 +40,7 @@ impl<T> MVar<T> {
         }
     }
 
-    pub fn put(&mut self, x: T) {
+    pub fn put(&self, x: T) {
         let mut guard = self.lock.lock().unwrap();
         loop {
             match *guard {
@@ -56,7 +56,7 @@ impl<T> MVar<T> {
         }
     }
 
-    pub fn modify<F: FnOnce(T) -> T>(&mut self, f: F) {
+    pub fn modify<F: FnOnce(T) -> T>(&self, f: F) {
         let mut guard = self.lock.lock().unwrap();
         loop {
             match guard.take() {
